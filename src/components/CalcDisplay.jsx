@@ -1,17 +1,16 @@
 import React, { Component, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useOperator } from '../utilities/Operator';
 
 export default class CalcDisplay extends Component {
-    operator = useOperator();
     constructor(props) {
         super(props);
+
+        this.operator = this.props.operator;
 
         this.state = {
             value: this.operator.getValue(),
             result: this.operator.getResult()
         }
-        this.operator.setComponent(this);
     }
     render() {
         return (
@@ -20,10 +19,6 @@ export default class CalcDisplay extends Component {
                 <Text style={this.styles.value}>{this.state.value}</Text>
             </View>
         );
-    }
-    setValue(value) {
-        console.warn(value);
-        this.setState({value});
     }
 
     styles = StyleSheet.create({

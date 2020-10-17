@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { TouchableHighlight, Text, StyleSheet } from 'react-native';
-import { useOperator } from '../utilities/Operator';
 
 export default class Button extends Component {
-    operator = useOperator();
     constructor(props) {
         super(props);
 
+        this.operator = this.props.operator;
+
         this.onClick = this.onClick.bind(this);
+        this.onLongClick = this.onLongClick.bind(this);
     }
 
     onClick() {
@@ -18,7 +19,7 @@ export default class Button extends Component {
                 break;
 
             case "operation":
-                this.operator.setOperation(this.props.value);
+                this.operator.setOperation(this.props.value || this.props.label);
                 break;
             
             case "clear":
@@ -31,9 +32,16 @@ export default class Button extends Component {
         }
     }
 
+    onLongClick() {
+        const type = (this.props.type || 'undefined');
+        if(type === "clear") {
+            this.operator.clearAll();
+        }
+    }
+
     render() {
         return (
-            <TouchableHighlight style={this.styles.button} onPress={this.props.onClick || this.onClick}>
+            <TouchableHighlight style={this.styles.button} onPress={this.props.onClick || this.onClick} onLongPress={this.onLongClick}>
                 <Text style={this.styles.text}>{this.props.label || 'B'}</Text>
             </TouchableHighlight>
         );

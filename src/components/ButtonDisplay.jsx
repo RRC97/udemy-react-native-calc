@@ -5,36 +5,37 @@ import Button from './Button';
 export default class ButtonDisplay extends Component {
     constructor(props) {
         super(props);
+        this.operator = this.props.operator;
     }
     render() {
         return (
             <View style={this.styles.display}>
                 <View style={this.styles.column}>
-                    <Button label="C" background="orange" color="white" type="clear"/>
-                    <Button label="7" type="number"/>
-                    <Button label="4" type="number"/>
-                    <Button label="1" type="number"/>
-                    <Button label="0" type="number"/>
+                    <Button operator={this.operator} label="C" background="orange" color="white" type="clear"/>
+                    <Button operator={this.operator} label="7" type="number"/>
+                    <Button operator={this.operator} label="4" type="number"/>
+                    <Button operator={this.operator} label="1" type="number"/>
+                    <Button operator={this.operator} label="0" type="number"/>
                 </View>
                 <View style={this.styles.column}>
-                    <Button label="%" background="black" color="white" background="darkgray" color="gray"/>
-                    <Button label="8" type="number"/>
-                    <Button label="5" type="number"/>
-                    <Button label="2" type="number"/>
-                    <Button label="00" type="number"/>
+                    <Button operator={this.operator} label="%" background="black" color="white" type="operation"/>
+                    <Button operator={this.operator} label="8" type="number"/>
+                    <Button operator={this.operator} label="5" type="number"/>
+                    <Button operator={this.operator} label="2" type="number"/>
+                    <Button operator={this.operator} label="00" type="number"/>
                 </View>
                 <View style={this.styles.column}>
-                    <Button label="/" background="black" color="white" type="operation" value="div"/>
-                    <Button label="9" type="number"/>
-                    <Button label="6" type="number"/>
-                    <Button label="3" type="number"/>
-                    <Button label="." background="darkgray" color="gray"/>
+                    <Button operator={this.operator} label="/" background="black" color="white" type="operation"/>
+                    <Button operator={this.operator} label="9" type="number"/>
+                    <Button operator={this.operator} label="6" type="number"/>
+                    <Button operator={this.operator} label="3" type="number"/>
+                    <Button operator={this.operator} label="." type="number"/>
                 </View>
                 <View style={this.styles.column}>
-                    <Button label="X" background="black" color="white" type="operation" value="multi"/>
-                    <Button label="-" background="black" color="white" type="operation" value="sub"/>
-                    <Button label="+" background="red" color="white" space={2} type="operation" value="sum"/>
-                    <Button label="=" background="gray" color="white" type="result"/>
+                    <Button operator={this.operator} label="X" background="black" color="white" type="operation" value="*"/>
+                    <Button operator={this.operator} label="-" background="black" color="white" type="operation"/>
+                    <Button operator={this.operator} label="+" background="red" color="white" type="operation" space={2}/>
+                    <Button operator={this.operator} label="=" background="black" color="white" type="result"/>
                 </View>
             </View>
         );

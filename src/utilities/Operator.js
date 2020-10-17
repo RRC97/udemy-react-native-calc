@@ -2,20 +2,26 @@ export default class Operator {
     value = "0";
     lastValue = "0";
     result = "";
-    operation = "empty";
-    lastOperation = "empty";
+    operation = "";
+    lastOperation = "";
     component;
 
     getValue() {
-        return this.value;
+        return this.value.toString();
     }
     addValue(value) {
-        this.value = Math.floor(parseFloat(this.value + value));
-        this.component.setState({value: this.value});
+        if(this.value !== "0" || value === ".") {
+            if(value !== "." || !this.getValue().includes(".")) {
+                this.value = this.value + value;
+            }
+        } else if(value !== "00") {
+            this.value = value;
+        }
+        this.component.setState({value: this.getValue()});
     }
     clearValue() {
-        if(this.operation === "empty") {
-            this.lastOperation = "empty";
+        if(this.operation === "") {
+            this.lastOperation = "";
         }
         this.value = "0";
         this.component.setState({value: this.getValue()});
@@ -25,11 +31,13 @@ export default class Operator {
     }
     
     setOperation(operation) {
-        if(this.operation !== 'empty') {
-            this.operate();
+        if(this.operation !== "") {
+            if(this.getValue() !== "0") {
+                this.operate();
+            }
         } else {
             this.result = this.value;
-            this.value = "0"
+            this.value = "0";
         }
         
         this.operation = operation;
@@ -40,20 +48,11 @@ export default class Operator {
         });
     }
     getOperationSymbol() {
-        switch(this.operation) {
-            case "sum":
-                return "+";
-            case "sub":
-                return "+";
-            case "multi":
-                return "x";
-            case "div":
-                return "/";
-            default:
-                return "";
+        if(this.operation === "*") {
+            return "x";
         }
-    }
-    clearOperation() {
+
+        return this.operation;
     }
 
     operate() {
@@ -62,25 +61,19 @@ export default class Operator {
 
         const result = parseFloat(this.result);
         const value = parseFloat(this.value);
-        switch(this.operation) {
-            case "sum":
-                this.result = (result + value).toString();
-                break;
-            case "sub":
-                this.result = (result - value).toString();
-                break;
-            case "multi":
-                this.result = (result * value).toString();
-                break;
-            case "div":
-                this.result = (result / value).toString();
-                break;
+        if(this.operation === "%") {
+            this.result = (result / 100) * value;
+        } else {
+            this.result = eval(result + this.operation + value);
         }
         this.value = "0";
     }
 
     done() {
-        if(this.operation === "empty") {
+        if(this.operation === "" && this.lastOperation === "") {
+            return;
+        }
+        if(this.operation === "") {
             this.result = this.value;
             this.value = this.lastValue;
             this.operation = this.lastOperation;
@@ -88,7 +81,7 @@ export default class Operator {
         this.operate();
         this.value = this.result;
         this.result = "";
-        this.operation = "empty";
+        this.operation = "";
 
         this.component.setState({
             value: this.getValue(),
@@ -99,20 +92,16 @@ export default class Operator {
         
         this.value = "0";
         this.result = "";
-        this.operation = "empty";
+        this.operation = "";
         this.lastValue = this.value;
         this.lastOperation = this.operation;
+
+        this.component.setState({
+            value: this.getValue(),
+            result: this.getResult()
+        });
     }
     setComponent(component) {
         this.component = component;
     }
-
-    static instance;
-}
-
-export function useOperator() {
-    if(!(Operator.instance)) {
-        Operator.instance = new Operator();
-    } 
-    return Operator.instance;
 }
